@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { gql } from '@apollo/client';
 import { Query } from '@apollo/client/react/components';
 import { Plus } from '@styled-icons/boxicons-regular';
 import { ChevronDown } from '@styled-icons/boxicons-regular/ChevronDown';
@@ -10,6 +9,7 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import { isPastEvent } from '../lib/events';
+import { API_V2_CONTEXT, gqlV2 } from '../lib/graphql/helpers';
 import { getFromLocalStorage, LOCAL_STORAGE_KEYS } from '../lib/local-storage';
 import { capitalize } from '../lib/utils';
 
@@ -26,7 +26,7 @@ import StyledRoundButton from './StyledRoundButton';
 import { P, Span } from './Text';
 import { withUser } from './UserProvider';
 
-const memberInvitationsCountQuery = gql`
+const memberInvitationsCountQuery = gqlV2`
   query MemberInvitationsCount($memberCollectiveId: Int!) {
     memberInvitations(MemberCollectiveId: $memberCollectiveId) {
       id
@@ -235,6 +235,7 @@ class TopBarProfileMenu extends React.Component {
                 query={memberInvitationsCountQuery}
                 variables={{ memberCollectiveId: LoggedInUser.CollectiveId }}
                 fetchPolicy="network-only"
+                context={API_V2_CONTEXT}
               >
                 {({ data, loading }) =>
                   loading === false && data && data.memberInvitations && data.memberInvitations.length > 0 ? (
