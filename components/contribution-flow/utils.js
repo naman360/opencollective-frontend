@@ -3,7 +3,7 @@ import { find, get, sortBy, uniqBy } from 'lodash';
 import { defineMessages, FormattedMessage } from 'react-intl';
 
 import { CollectiveType } from '../../lib/constants/collectives';
-import { GQLV2_PAYMENT_METHOD_TYPES } from '../../lib/constants/payment-methods';
+import { GQLV2_PAYMENT_METHOD_SERVICES, GQLV2_PAYMENT_METHOD_TYPES } from '../../lib/constants/payment-methods';
 import { getPaymentMethodName } from '../../lib/payment_method_label';
 import {
   getPaymentMethodIcon,
@@ -103,6 +103,15 @@ export const generatePaymentMethodOptions = (
         title: 'PayPal',
         paymentMethod: { type: GQLV2_PAYMENT_METHOD_TYPES.PAYPAL },
         icon: getPaymentMethodIcon({ service: 'paypal', type: 'payment' }, collective),
+      });
+    }
+
+    if (!interval && supportedPaymentMethods.includes(GQLV2_PAYMENT_METHOD_TYPES.CREDIT_CARD)) {
+      uniquePMs.push({
+        key: 'alipay',
+        paymentMethod: { type: GQLV2_PAYMENT_METHOD_TYPES.ALIPAY },
+        title: <FormattedMessage id="contribute.alipay" defaultMessage="AliPay" />,
+        icon: getPaymentMethodIcon({ type: 'alipay' }, collective),
       });
     }
 
